@@ -16,6 +16,13 @@ char keyMatrix[rowAmount][colAmount] = {
   {keyNone, keyNone,  keyNone,  keyNone}
 };
 
+int usedButtons[4][2] = {
+  {0, 1},
+  {1, 0},
+  {1, 2},
+  {2, 1}
+};
+
 byte rowPins[rowAmount] = { 5, 4, 3, 2 };
 byte colPins[colAmount] = { 6, 7, 8, 9 };
 
@@ -47,14 +54,14 @@ void loop()
 char getKey()
 {
   char result = keyNone;
-  for (int i = 0; i < rowAmount; i++) {
-    for (int j = 0; j < colAmount; j++) {
-      bool isDown = isKeyDown(i, j);
-      if (isDown && millis() - lastMs > delayMs) {
-        result = keyMatrix[i][j];
-        lastMs = millis();
-      }
-    } 
+  for (int i = 0; i < 4; i++) {
+    int y = usedButtons[i][0];
+    int x = usedButtons[i][1];
+    bool isDown = isKeyDown(y, x);
+    if (isDown && millis() - lastMs > delayMs) {
+      result = keyMatrix[y][x];
+      lastMs = millis();
+    }
   }
   return result;
 }
